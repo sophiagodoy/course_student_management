@@ -34,18 +34,26 @@ Aluno → Curso → Currículo → Matérias
 | `historico/2` | Notas e frequência           |
 
 ## 💻 Exemplos de Uso
-No terminal do SWI-Prolog, você pode interagir com o sistema:
-- Verificar conclusão de curso → concluiu(12909, 1).
-- Disciplinas pendentes → falta(12090, 2, X).
-- Percentual concluído → jafoi(12909, 1, P).
-- Disciplinas extras → extra(12808, 1, X).
+```prolog
+% Verificar conclusão de curso
+concluiu(12909, 1).
+
+% Disciplinas pendentes
+falta(12090, 2, X).
+
+% Percentual concluído
+jafoi(12909, 1, P).
+
+% Disciplinas extras
+extra(12808, 1, X).
+```
 
 ## ⚙️ Como Executar
 1) Abra o SWI-Prolog
 2) Carregue o arquivo
 3) Execute as consultas desejadas
 
-### 🛠️ Tecnologias e Conceitos
+## 🛠️ Tecnologias e Conceitos
 - Linguagem: Prolog (SWI-Prolog)
 - Paradigma: Lógico (Declarativo)
 - Técnicas: Recursão, Unificação, Manipulação de Listas e Backtracking.
