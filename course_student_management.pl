@@ -102,7 +102,7 @@ falta(RA, CC, OQUE) :-
     pega_faltas(RA, ListaMaterias, OQUE). % Dessas matérias, quais o aluno não passou?
 
 % EXTRA - quais matérias o aluno fez que não pertencem ao curso
-pega_extra(_, _, [], []). % Se não tem mais histórico, acabou 
+pega_extra(_, _, [], []). % Se não tem mais histórico, acabou, não tem mais extras 
 
 % Quando a matéria é extra...
 pega_extra(RA, Curriculo, [item(CM,_,_,_,_)|T], [Nome|Resto]) :-
