@@ -54,35 +54,35 @@ historico(12090, [
     item(8,2,2014,8.0,0.89)
 ]).
 
-% CONCLUIU 
+% CONCLUIU - aluno concluiu o curso? 
 % Verifica se um elemento está contido em uma lista
-pertence(X, [X|_]). % Se o primeiro da lista for igual ao X 
-pertence(X, [_|R]) :- pertence(X, R). % Se não for o primeiro, ignora ele e procura no resto
+pertence(X, [X|_]). % X (primeiro elemento) pertence à lista se ele for o primeiro elemento
+pertence(X, [_|R]) :- pertence(X, R). % Se não for o primeiro, procura no resto (R) da lista
 
-% Verifica se o aluno foi aprovado na matéria 
+% Verifica se o aluno (RA) foi aprovado na matéria (CodMateria) 
 aprovado(RA, CodMateria) :-
-    historico(RA, ListaHistorico), 
+    historico(RA, ListaHistorico), % Pega o histórico do aluno 
     
-    % Procura no histórico um item dessa matéria
+    % Procura dentro da ListaHistorico um registro dessa matéria e pega a nota e a frequência
     pertence(item(CodMateria, _, _, Nota, Frequencia), ListaHistorico), 
     Nota >= 5.0,
     Frequencia >= 0.75. 
 
-% Verifica se o aluno concluiu o curso 
-todas_aprovadas(_, []). % Se o aluno não tem amis matérias ele já passou em todas
+% Verifica se o aluno concluiu o curso (aprovado em todas as matérias) 
+todas_aprovadas(_, []). % Não tem mais matérias na lista, então o aluno já passou em todas
 
-% O aluno passou na primeira matéria e também passou em todas as outras
+% O aluno (RA) passou em todas as matérias se: 
 todas_aprovadas(RA, [M|R]) :-
-    aprovado(RA, M),
-    todas_aprovadas(RA, R).
+    aprovado(RA, M), % Passou na primeira matéria (M)
+    todas_aprovadas(RA, R). % E passou em todas as outras (R = resto) 
 
+% O aluno (RA) concluiu o curso se: 
 concluiu(RA, CodigoCurso) :-
-    cursa(RA, CodigoCurso), % O aluno faz esse curso?
-    curriculo(CodigoCurso, Materias), % Quais matérias esse curso tem?
-    todas_aprovadas(RA, Materias). % O aluno passou em todas essas matérias?
+    cursa(RA, CodigoCurso), % Ele está matriculado no curso
+    curriculo(CodigoCurso, Materias), % Verifica quais matérias esse curso tem 
+    todas_aprovadas(RA, Materias). % Passou em todas essas matérias
 
-% FALTAS 
-% Verifica quais matérias falta para o aluno terminar o curso 
+% FALTAS - quais matérias falta para o aluno terminar o curso 
 pega_faltas(_, [], []). % Se não tem mais matérias, não falta nada
 
 % Se o aluno NÃO passou na matéria, coloca ela na lista de faltas
@@ -98,11 +98,10 @@ pega_faltas(RA, [H|T], Resto) :-
 
 falta(RA, CC, OQUE) :-
     cursa(RA, CC), % O aluno faz esse curso?
-    curriculo(CC, ListaMaterias), % Quais matérias esse curso tem?”
+    curriculo(CC, ListaMaterias), % Quais matérias esse curso tem?
     pega_faltas(RA, ListaMaterias, OQUE). % Dessas matérias, quais o aluno não passou?
 
-% EXTRA
-% Quais matérias o aluno fez que NÃO pertencem ao curso?
+% EXTRA - quais matérias o aluno fez que não pertencem ao curso
 pega_extra(_, _, [], []). % Se não tem mais histórico, acabou 
 
 % Quando a matéria é extra...
@@ -122,11 +121,8 @@ extra(RA, CC, QUAIS) :-
     historico(RA, Historico),
     pega_extra(RA, ListaMaterias, Historico, QUAIS).
 
-% CONTAGEM
-% Conta quantas matérias o aluno passou e quantas matérias existem no curso
-
-% Se não tem mais matérias, o total é 0
-conta_aprovadas(_, [], 0).
+% CONTAGEM - conta quantas matérias o aluno passou e quantas matérias existem no curso
+conta_aprovadas(_, [], 0). % Se não tem mais matérias, o total é 0
 
 % Se passou na matéria, soma + 1
 conta_aprovadas(RA, [H|T], N) :-
@@ -145,10 +141,9 @@ conta_elementos([_|T], N) :-
     conta_elementos(T, N1),
     N is N1 + 1.
 
-% PERCENTUAL
-% Quantos % do curso o aluno já completou?
+% PERCENTUAL - quantos % do curso o aluno já completou?
 jafoi(RA, CC, QUANTO) :-
-    curriculo(CC, ListaMaterias),
-    conta_aprovadas(RA, ListaMaterias, Feitas),
-    conta_elementos(ListaMaterias, Total),
+    curriculo(CC, ListaMaterias), % Pega as matérias do curso
+    conta_aprovadas(RA, ListaMaterias, Feitas), % Conta quantas matérias o aluno já passou
+    conta_elementos(ListaMaterias, Total), % Conta quantas matérias existem no curso
     QUANTO is (Feitas / Total) * 100.
