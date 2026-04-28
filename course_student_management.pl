@@ -122,6 +122,7 @@ extra(RA, CC, QUAIS) :-
     pega_extra(RA, ListaMaterias, Historico, QUAIS).
 
 % CONTAGEM - conta quantas matérias o aluno passou e quantas matérias existem no curso
+% Conta quantas matérias o aluno já passou
 conta_aprovadas(_, [], 0). % Se não tem mais matérias, o total é 0
 
 % Se passou na matéria, soma + 1
@@ -133,13 +134,15 @@ conta_aprovadas(RA, [H|T], N) :-
 % Se não passou, não soma nada
 conta_aprovadas(RA, [H|T], N) :-
     \+ aprovado(RA, H),
-    conta_aprovadas(RA, T, N).
+    conta_aprovadas(RA, T, N). % Continua contando o resto (sem somar)
 
-conta_elementos([], 0).
+% Conta quantas matérias existem no curso
+conta_elementos([], 0). % Se a lista está vazia, não tem nenhum elemento
 
+% Se a lista tem pelo menos 1 elemento...
 conta_elementos([_|T], N) :-
-    conta_elementos(T, N1),
-    N is N1 + 1.
+    conta_elementos(T, N1), % Conta quantos elementos tem no resto da lista (T)
+    N is N1 + 1 .% Soma +1 (por causa do elemento que foi ignorado no começo)
 
 % PERCENTUAL - quantos % do curso o aluno já completou?
 jafoi(RA, CC, QUANTO) :-
